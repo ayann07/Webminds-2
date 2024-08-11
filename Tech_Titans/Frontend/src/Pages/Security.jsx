@@ -6,6 +6,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { toast } from 'react-toastify';
 import { useAuth } from '../store/auth';
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from '../main';
 
 const Security = () => {
   const [isLoading,setIsLoading]=useState(false)
@@ -38,7 +39,7 @@ const Security = () => {
     }
     setIsLoading(true)
     try {
-      const response = await fetch("https://webminds-2-1.onrender.com/api/auth/change", {
+      const response = await fetch(`${BASE_URL}/auth/change`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

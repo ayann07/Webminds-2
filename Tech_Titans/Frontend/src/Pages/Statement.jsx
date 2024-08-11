@@ -3,6 +3,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell, Typography,CircularPr
 import SideBar from '../components/SideBar';
 import { useAuth } from '../store/auth';
 import {toast} from 'react-toastify';
+import { BASE_URL } from '../main';
 
 const Statement = () => {
   const [isLoading,setIsLoading]=useState(false)
@@ -25,10 +26,20 @@ const Statement = () => {
     }
   };
 
+  const getPaymentStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'success':
+        return '#4CAF50';
+      case 'failed':
+        return '#f44336';
+      default:
+        return 'black';
+    }
+  };
   const getTransactions=async()=>{
     setIsLoading(true)
     try{
-      const response=await fetch("https://webminds-2-1.onrender.com/api/payments/transactions",{
+      const response=await fetch(`${BASE_URL}/payments/transactions`,{
         method:"GET",
         headers:{
           "Authorization":authToken
@@ -72,6 +83,8 @@ const Statement = () => {
             <TableCell className='statementHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px',borderBottom:'none' }}>Date & Time</TableCell>
             <TableCell className='statementHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px',borderBottom:'none' }}>Amount</TableCell>
             <TableCell className='statementHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px',borderBottom:'none' }}>To / From</TableCell>
+            <TableCell className='tableHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px', borderBottom: 'none' }}>Status</TableCell>
+            <TableCell className='tableHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px', borderBottom: 'none' }}>Reference ID</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -93,6 +106,8 @@ const Statement = () => {
             <TableCell className='statementHead' sx={{ color: 'black', borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>{formattedDate}</TableCell>
             <TableCell className='statementHead' sx={{ color: 'black', borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>₹ {transaction.amount}</TableCell>
             <TableCell className='statementHead' sx={{ color:'black', borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>{transaction.status=="sent"?transaction.to_name:transaction.from_name}</TableCell>
+            <TableCell className='tableHead' sx={{ color: getPaymentStatusColor(transaction.paymentStatus), borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>{(transaction.paymentStatus).toUpperCase()}</TableCell>
+                    <TableCell className='tableHead' sx={{ color: 'black', borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>{transaction.referenceID}</TableCell>
         </TableRow>
     );
 })}

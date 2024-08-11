@@ -25,6 +25,14 @@ const transactionSchema = mongoose.Schema(
 		date:{
 			type:Date,
 			default:Date.now()
+		},
+		paymentStatus:{
+			type:String,
+			default:'failed'
+		},
+		referenceID:{
+			type:String,
+			required:true
 		}
 	},
 	{

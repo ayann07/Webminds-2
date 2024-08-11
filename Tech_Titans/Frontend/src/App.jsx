@@ -1,7 +1,4 @@
-
-
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
 import Home from './Pages/Home'
 import SendMoney from './Pages/SendMoney'
 import ReceiveMoney from './Pages/ReceiveMoney'
@@ -34,8 +31,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* {!isLoginPage && isLoggedIn && <Header/>} */}
-      {/* {!isLoginPage && isLoggedIn && <SideBar/>} */}
       {!isLoginPage && isLoggedIn &&
       <IconButton className='topButton' onClick={toggleSidebar}>
                 <MenuIcon />
@@ -45,7 +40,7 @@ function App() {
         <Routes>
           
           <Route path='/logout' element={<LogOut/>}/>
-          <Route path='/Dashboard' element={<Home/>}/>
+          <Route path='/dashboard' element={<Home/>}/>
           <Route path='/send-money' element={<SendMoney/>}/>
           <Route path='/receive-money' element={<ReceiveMoney/>}/>
           <Route path='/add-account' element={<AddAccount/>}/>

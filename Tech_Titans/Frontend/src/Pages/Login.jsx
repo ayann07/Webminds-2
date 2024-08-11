@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/auth";
 import { toast } from "react-toastify";
 import logoImage from "../assets/easy-pay-logo.png";
+import { BASE_URL } from "../main";
 const Login = () => {
   const navigate = useNavigate();
-  const { storeToken } = useAuth();
-
+  const { storeToken} = useAuth();
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -23,7 +23,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://webminds-2-1.onrender.com/api/auth/login", {
+      const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,8 +48,7 @@ const Login = () => {
     <div
     className="loginPage"
       style={{
-        backgroundColor: "#f907fc",
-        backgroundImage: "linear-gradient(315deg, #f907fc 0%, #05d6d9 74%)",
+        background: 'linear-gradient(135deg, rgb(206, 159, 252) 10%, rgb(115, 103, 240) 100%)',
         height: "100vh",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",

@@ -3,6 +3,7 @@ import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import { useAuth } from "../store/auth";
 import { Container, CircularProgress, Typography } from "@mui/material";
+import { BASE_URL } from "../main";
 
 function LineChart() {
   const { authToken } = useAuth();
@@ -85,7 +86,7 @@ function LineChart() {
     const getTransactions = async () => {
       try {
         const response = await fetch(
-          "https://webminds-2-1.onrender.com/api/payments/transactions",
+          `${BASE_URL}/payments/transactions`,
           {
             method: "GET",
             headers: {

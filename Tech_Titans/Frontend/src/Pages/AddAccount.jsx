@@ -5,6 +5,8 @@ import { Typography, TextField, CircularProgress, MenuItem, Box } from '@mui/mat
 import { toast } from 'react-toastify'
 import { useAuth } from '../store/auth';
 import { useNavigate } from 'react-router-dom'
+import { BASE_URL } from '../main';
+
 const AddAccount = () => {
   const navigate = useNavigate()
   const [inputs, setInputs] = useState({
@@ -26,7 +28,7 @@ const AddAccount = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch("https://webminds-2-1.onrender.com/api/account/addBank", {
+      const response = await fetch(`${BASE_URL}/account/addBank`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

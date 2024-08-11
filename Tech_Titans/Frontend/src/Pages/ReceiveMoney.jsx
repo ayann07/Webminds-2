@@ -5,6 +5,7 @@ import SideBar from '../components/SideBar';
 import { Divider, Typography, Box, CircularProgress } from '@mui/material';
 import { useAuth } from '../store/auth';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../main';
 
 const ReceiveMoney = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +17,7 @@ const ReceiveMoney = () => {
   const getDetails = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("https://webminds-2-1.onrender.com/api/auth/user", {
+      const response = await fetch(`${BASE_URL}/auth/user`, {
         method: "GET",
         headers: {
           Authorization: authToken,
@@ -25,7 +26,7 @@ const ReceiveMoney = () => {
       if (response.ok) {
         const data = await response.json();
         setUpiID(`${data.user.phone}@easyPay`);
-        const newRes = await fetch(`https://webminds-2-1.onrender.com/api/account/bank/${data.user.banks[0]._id}`, {
+        const newRes = await fetch(`${BASE_URL}/account/bank/${data.user.banks[0]._id}`, {
           method: "GET",
           headers: {
             Authorization: authToken,
