@@ -41,8 +41,8 @@ const makeTransaction = async (req, res) => {
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             mode: 'payment',
-            success_url: 'https://easypay-zuzw.onrender.com/',
-            cancel_url: 'https://easypay-zuzw.onrender.com/',
+            success_url: 'https://easypay-ugcg.onrender.com/',
+            cancel_url: 'https://easypay-ugcg.onrender.com/',
             customer_email: user.email,
             client_reference_id:referenceID ,
             line_items: [{
