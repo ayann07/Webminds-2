@@ -4,6 +4,7 @@ import { useAuth } from '../store/auth';
 import { Typography, MenuItem, TextField, Box, Select, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'
+import { BASE_URL } from '../main';
 const SendMoney = () => {
   const navigate = useNavigate()
   const [inputs, setInputs] = useState({
@@ -18,7 +19,7 @@ const SendMoney = () => {
 
   const getAccounts = async () => {
     try {
-      const response = await fetch("https://webminds-2-1.onrender.com/api/account/getUserAccounts", {
+      const response = await fetch(`${BASE_URL}/account/getUserAccounts`, {
         method: "GET",
         headers: {
           Authorization: authToken,
@@ -56,36 +57,45 @@ const SendMoney = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); 
-    delete inputs['currency'];
-
+    setIsLoading(true);
+    const { currency, ...body } = inputs;
+  
     try {
-      const response = await fetch("https://webminds-2-1.onrender.com/api/payments/makePayment", {
+      const response = await fetch(`${BASE_URL}/payments/makePayment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": authToken
         },
-        body: JSON.stringify(inputs)
-      })
-
-      if (response.ok) {
-        navigate('/Dashboard')
-        toast.success('Payment Successfull!')
+        body: JSON.stringify(body)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error making payment');
+      }
+  
+      const data = await response.json();
+      console.log('Checkout Session:', data.session);
+  
+      if (data.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
       } else {
-        toast.error('Some error occured!')
+        toast.error('Failed to redirect to checkout');
       }
     } catch (err) {
-      toast.error(err)
+      toast.error(err.message || 'Failed to process payment');
+    } finally {
+      setIsLoading(false);
+      setInputs({
+        from_account: '',
+        to_account: '',
+        amount: '',
+        currency: 'INR'
+      });
     }
-    setIsLoading(false); 
-    setInputs({
-      from_account: '',
-      to_account: '',
-      amount: '',
-      currency: 'INR'
-    });
   };
+  
 
   const handleCancel = () => {
     setInputs({

@@ -3,6 +3,7 @@ import { Typography, TextField, Button, Select, MenuItem, Box } from '@mui/mater
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import SideBar from '../components/SideBar';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../main';
 
 const AddBankAcc = () => {
   const [inputs, setInputs] = useState({
@@ -22,7 +23,7 @@ const AddBankAcc = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://webminds-2-1.onrender.com/api/account/admin/createAccount", {
+      const response = await fetch(`${BASE_URL}/account/admin/createAccount`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"

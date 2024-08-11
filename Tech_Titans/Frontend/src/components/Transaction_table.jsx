@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Box, CircularProgress } from '@mui/material';
 import { useAuth } from '../store/auth';
 import { toast } from 'react-toastify'
+import { BASE_URL } from '../main';
 
 const Transaction_table = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -25,11 +26,21 @@ const Transaction_table = () => {
         return 'black';
     }
   };
+  const getPaymentStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'success':
+        return '#4CAF50';
+      case 'failed':
+        return '#f44336';
+      default:
+        return 'black';
+    }
+  };
 
   const getTransactions = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch("https://webminds-2-1.onrender.com/api/payments/transactions", {
+      const response = await fetch(`${BASE_URL}/payments/transactions`, {
         method: "GET",
         headers: {
           "Authorization": authToken
@@ -46,7 +57,7 @@ const Transaction_table = () => {
   useEffect(() => {
     getTransactions();
   }, [])
-
+  console.log(transactions)
   return (
     <div >
       <Typography className='recent' variant="h5" style={{ textAlign: 'center', color: 'black', marginBottom: '30px', fontFamily: 'times-new-roman', fontSize: '2.3rem' }}>Recent Transactions</Typography>
@@ -72,11 +83,13 @@ const Transaction_table = () => {
               <TableCell className='tableHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px', borderBottom: 'none' }}>Date & Time</TableCell>
               <TableCell className='tableHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px', borderBottom: 'none' }}>Amount</TableCell>
               <TableCell className='tableHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px', borderBottom: 'none' }}>To / From</TableCell>
+              <TableCell className='tableHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px', borderBottom: 'none' }}>Status</TableCell>
+              <TableCell className='tableHead' style={{ color: 'white', fontWeight: 'bolder', fontFamily: 'Times new roman', fontSize: '20px', borderBottom: 'none' }}>Reference ID</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {
-              transactions.sort(compareDates).reverse().slice(0, 5).map((transaction, index) => {
+              transactions && transactions?.sort(compareDates).reverse().slice(0, 5).map((transaction, index) => {
                 var createdAt = transaction.createdAt;
                 var date = new Date(createdAt);
                 var formattedDate = date.toLocaleString('en-US', {
@@ -95,6 +108,8 @@ const Transaction_table = () => {
                     <TableCell className='tableHead' sx={{ color: 'black', borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>{formattedDate}</TableCell>
                     <TableCell className='tableHead' sx={{ color: 'black', borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>₹ {transaction.amount}</TableCell>
                     <TableCell className='tableHead' sx={{ color: 'black', borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>{transaction.status == "sent" ? transaction.to_name : transaction.from_name}</TableCell>
+                    <TableCell className='tableHead' sx={{ color: getPaymentStatusColor(transaction.paymentStatus), borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>{(transaction.paymentStatus).toUpperCase()}</TableCell>
+                    <TableCell className='tableHead' sx={{ color: 'black', borderBottom: 'none', fontFamily: 'serif', fontSize: '1.3rem' }}>{transaction.referenceID}</TableCell>
                   </TableRow>
                 );
               })}

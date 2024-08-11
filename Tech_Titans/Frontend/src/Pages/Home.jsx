@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import PaymentIcon from "@mui/icons-material/Payment";
@@ -8,7 +8,6 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import UpcomingPayments from "../components/Upcoming_payments";
 import Transaction_table from "../components/Transaction_table";
 import LineChart from "../components/LineChart";
-
 const linkStyles = {
   textDecoration: "none",
   color: "white",
